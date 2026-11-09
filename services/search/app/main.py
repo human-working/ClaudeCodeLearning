@@ -51,7 +51,7 @@ def consume_events(stop: threading.Event) -> None:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     stop = threading.Event()
-    worker = threading.Thread(target=consume_events, args=(stop,), daemon=True)
+    worker = threding.Thread(target=consume_events, args=(stop,), daemon=True)
     worker.start()
     yield
     stop.set()

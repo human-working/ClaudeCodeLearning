@@ -1,0 +1,112 @@
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --text: #1b1f2a;
+  --muted: #5d6475;
+  --border: #dfe3ec;
+  --accent: #3b5bdb;
+  --accent-text: #ffffff;
+  --error: #c92a2a;
+  --warn-bg: #fff4e6;
+  --warn: #8a4b00;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12141a;
+    --surface: #1b1e27;
+    --text: #e7e9ef;
+    --muted: #9aa1b2;
+    --border: #2c3140;
+    --accent: #7c95ff;
+    --accent-text: #0d1020;
+    --error: #ff8787;
+    --warn-bg: #3a2a12;
+    --warn: #ffc078;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+main { max-width: 1080px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { margin: 8px 0 4px; font-size: 1.75rem; }
+h2 { margin: 0 0 8px; font-size: 1.2rem; }
+a { color: var(--accent); }
+.muted { color: var(--muted); }
+.small { font-size: 0.875rem; }
+.center { text-align: center; }
+.error { color: var(--error); }
+.warn { background: var(--warn-bg); color: var(--warn); padding: 6px 10px; border-radius: 6px; }
+
+.topbar {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 700; }
+.topbar nav { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.topbar nav a { text-decoration: none; color: var(--text); }
+.topbar nav a.active { color: var(--accent); font-weight: 600; }
+.user { font-size: 0.875rem; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 16px;
+}
+.auth { max-width: 400px; margin: 48px auto; display: flex; flex-direction: column; gap: 12px; }
+label { display: flex; flex-direction: column; gap: 4px; font-weight: 500; }
+input, textarea {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--text); width: 100%;
+}
+textarea { resize: vertical; margin-top: 6px; }
+button {
+  font: inherit; font-weight: 600; padding: 10px 18px; border: 0; border-radius: 8px;
+  background: var(--accent); color: var(--accent-text); cursor: pointer;
+}
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+button.link { background: none; color: var(--accent); padding: 0; }
+.row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 12px; }
+
+.tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.tier { position: relative; display: flex; flex-direction: column; }
+.tier.featured { border: 2px solid var(--accent); }
+.tier ul { padding-left: 20px; flex: 1; }
+.tier li { margin: 4px 0; }
+.price { font-size: 1.9rem; font-weight: 700; margin: 4px 0; }
+.price .muted { font-size: 1rem; font-weight: 400; }
+.badge {
+  position: absolute; top: -12px; right: 16px; background: var(--accent); color: var(--accent-text);
+  font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 999px;
+}
+.points { padding-left: 20px; }
+.points li { margin-bottom: 14px; }
+.points p { margin: 4px 0 0; }
+.tag {
+  margin-left: 8px; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--border); color: var(--muted);
+}
+
+/* Needs-matcher results shown on the package cards */
+.tier.dimmed { opacity: 0.6; }
+.fit {
+  background: var(--bg); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 12px; margin: 8px 0;
+}
+.fit h3 { margin: 0 0 6px; font-size: 0.95rem; color: var(--accent); }
+.fit ul { padding-left: 18px; margin: 0; }
+.fit li p { margin: 2px 0 6px; font-size: 0.9rem; }
+.needs-summary blockquote {
+  margin: 4px 0 8px; padding-left: 12px; border-left: 3px solid var(--accent); white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.result-heading { margin-top: 24px; }
+
+/* Dot points added to a package from the client's own needs */
+.features li.added { font-weight: 600; }
+.features li.added::marker { content: "+  "; color: var(--accent); font-weight: 700; }
+.because {
+  display: inline-block; margin-left: 6px; font-size: 0.75rem; font-weight: 500; padding: 1px 8px;
+  border-radius: 999px; background: var(--accent); color: var(--accent-text);
+}
+.privacy { margin: 8px 0 0; }

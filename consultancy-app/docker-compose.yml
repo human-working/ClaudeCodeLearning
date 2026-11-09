@@ -1,0 +1,65 @@
+name: consultancy-app
+
+# Hardening shared by every service.
+x-hardening: &hardening
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  restart: unless-stopped
+  tmpfs:
+    - /tmp
+
+x-jwt-env: &jwt-env
+  JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (see .env.example)}
+  JWT_ISSUER: ${JWT_ISSUER:-consultancy-auth}
+  JWT_AUDIENCE: ${JWT_AUDIENCE:-consultancy-app}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8080}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+services:
+  auth:
+    <<: *hardening
+    build: ./auth
+    environment:
+      <<: *jwt-env
+      JWT_TTL_MINUTES: ${JWT_TTL_MINUTES:-15}
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      DB_PATH: /data/auth.db
+    volumes:
+      - auth-data:/data
+    networks: [backend]          # internal only: no internet access, no published ports
+
+  matcher:
+    <<: *hardening
+    build: ./matcher
+    environment:
+      <<: *jwt-env
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CLAUDE_MODEL: ${CLAUDE_MODEL:-claude-opus-5-5}
+      CLAUDE_EFFORT: ${CLAUDE_EFFORT:-medium}
+      MATCHER_MODE: ${MATCHER_MODE:-auto}
+      CURRENCY: ${CURRENCY:-USD}
+    networks: [backend, egress]  # egress is needed to reach api.anthropic.com
+
+  frontend:
+    <<: *hardening
+    build: ./frontend
+    ports:
+      - "${APP_PORT:-8080}:8080" # the ONLY published port
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+    depends_on:
+      auth: { condition: service_healthy }
+      matcher: { condition: service_healthy }
+    networks: [edge, backend]
+
+networks:
+  edge: {}
+  egress: {}
+  backend:
+    internal: true
+
+volumes:
+  auth-data: {}

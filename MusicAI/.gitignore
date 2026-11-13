@@ -1,0 +1,10 @@
+
+EMOPIA_1.0/
+*.zip
+
+__pycache__/
+*.pyc
+
+
+venv/
+.venv/
